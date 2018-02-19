@@ -1,13 +1,24 @@
 package work.schotte;
 
+import java.util.ArrayList;
+import work.schotte.builders.ArticlePage;
+import work.schotte.builders.FrontPage;
+import work.schotte.filereaders.ArticleTextFileFinder;
+
 public class Publisher {
 
   public static void main(String[] args) {
-    // Build front page object with indexes.
-    // Build article pages in parallel thread.
-    // We only need to know what our article pages are, when we start building front page.
-    // Article pages we can build in parallel instantly after discovering articles in a directory. (for that we need directory traversing)
-    // added gpg sign of git commits (just testing) did not work once
+    
+    FrontPage fp = new FrontPage();
+    ArticleTextFileFinder atff = new ArticleTextFileFinder();
+    String[] foundTextFiles = atff.getFoundTextFiles();
+    ArrayList<ArticlePage> arpgs = new ArrayList<>();
+    for (String foundTextFile : foundTextFiles ) {
+      arpgs.add(new ArticlePage(foundTextFile));
+      // TODO: Build article pages in parallel threads.
+    
+    }
+    
   }
 
 }
