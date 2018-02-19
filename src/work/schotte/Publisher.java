@@ -7,7 +7,7 @@ public class Publisher {
     // Build article pages in parallel thread.
     // We only need to know what our article pages are, when we start building front page.
     // Article pages we can build in parallel instantly after discovering articles in a directory. (for that we need directory traversing)
-    // added gpg sign of git commits (just testing)
+    // added gpg sign of git commits (just testing) did not work once
   }
 
 }
