@@ -3,13 +3,7 @@ package work.schotte.builders;
 import work.schotte.pages.WebPage;
 
 public class ArticlePage extends WebPage implements Runnable {
-  public ArticlePage(String pageTitle, String pageContent) {
-    super(pageTitle, pageContent);
-  }
   
-  public ArticlePage(String page) {
-    super("title", "content");
-  }
 
   @Override
   public void run() {

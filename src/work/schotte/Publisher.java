@@ -3,6 +3,7 @@ package work.schotte;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
+import work.schotte.pageparts.HTML5;
 import work.schotte.builders.ArticlePage;
 import work.schotte.builders.FrontPage;
 import work.schotte.filereaders.ArticleTextFileFinder;
@@ -61,6 +62,8 @@ public class Publisher {
       // TODO: Print usage help
       System.exit(1);
     }
+    
+    System.out.println(new HTML5());
     
     /*
     FrontPage fp = new FrontPage();

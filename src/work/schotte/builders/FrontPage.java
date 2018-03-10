@@ -6,20 +6,6 @@ import java.util.ArrayList;
 
 public class FrontPage extends WebPage {
   
-  public FrontPage(String pageTitle, String pageContent) {
-    super(pageTitle, pageContent);
-  
-  }
-
-  public FrontPage(String pageTitle) {
-    super(pageTitle, "");
-  }
-  
-  public FrontPage() {
-    super("unnamed page", "use this only for testing");
-    // TODO: This constructor should be removed after!
-  }
-  
   public boolean buildArticleIndex(ArrayList<ArticlePage> arpgs) {
     // TODO: Should return true value if index has been built successfully and return false on errors.
     return false;
