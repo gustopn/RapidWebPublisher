@@ -1,7 +1,13 @@
 package work.schotte.filereaders;
 
-public class ArticleTextFileFinder {
-  public String[] getFoundTextFiles() {
-    return new String[1];
+import java.io.File;
+
+public class ArticleTextFileFinder extends FileFinder {
+  
+  public ArticleTextFileFinder(String articlesdirpath) {
+    super(articlesdirpath);
   }
+  
+  
+  
 }

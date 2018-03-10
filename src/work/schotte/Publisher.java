@@ -1,14 +1,68 @@
 package work.schotte;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.util.Scanner;
 import work.schotte.builders.ArticlePage;
 import work.schotte.builders.FrontPage;
 import work.schotte.filereaders.ArticleTextFileFinder;
+import work.schotte.filereaders.SectionFileFinder;
 
 public class Publisher {
-
+  
+  private static boolean askToCreateDir(String dirabsolutepath) {
+    boolean answer = false;
+    Scanner scan = new Scanner(System.in);
+    System.out.print("Article directory " + dirabsolutepath + " not found, create?\n[Yes or No]: ");
+    answer = scan.nextLine().equals("Yes");
+    scan.close();
+    return answer;
+  }
+  
+  private static boolean prepareDirectory(File webdir, String articlesdirpath, String sectionsdirpath) {
+    // Can we write into this directory?
+    if (!webdir.canWrite()) return false;
+    // Is there a directory to store articles?
+    File articlesdir = new File(articlesdirpath);
+    if (!articlesdir.exists()) {
+      if ( askToCreateDir(articlesdirpath) ) {
+        if (articlesdir.mkdir()) System.out.println(articlesdirpath + " successfully created.");
+      } else {
+        return false;
+      }
+    }
+    // Is there a sections directory?
+    File sectionsdir = new File(sectionsdirpath);
+    if (!sectionsdir.exists()) return false;
+    // Something else? (TODO)
+    return true;
+  }
+  
   public static void main(String[] args) {
     
+    if (args.length == 1) {
+      String givenpath = args[0];
+      File webdir = new File(givenpath);
+      if (webdir.exists()) {
+        if (webdir.isDirectory()) {
+          String articlesdirpath = webdir.getAbsolutePath() + "/articles";
+          String sectionsdirpath = webdir.getAbsolutePath() + "/sections";
+          if (prepareDirectory(webdir, articlesdirpath, sectionsdirpath)) {
+            // TODO: Start collecting articles comparing their creation time to what we already have exported
+            ArticleTextFileFinder articleFinder = new ArticleTextFileFinder(articlesdirpath);
+            articleFinder.isCurrent();
+            // TODO: At same time start collecting front page sections and their creation time to what we already have exported
+            SectionFileFinder sectionFinder = new SectionFileFinder(sectionsdirpath);
+          }
+        }
+      }
+    } else {
+      System.err.println("Invalid number of arguments given, exiting");
+      // TODO: Print usage help
+      System.exit(1);
+    }
+    
+    /*
     FrontPage fp = new FrontPage();
     ArticleTextFileFinder atff = new ArticleTextFileFinder();
     String[] foundTextFiles = atff.getFoundTextFiles();
@@ -16,15 +70,21 @@ public class Publisher {
     for ( String foundTextFile : foundTextFiles ) {
       arpgs.add( new ArticlePage( foundTextFile ) );
     }
-    int artclno = arpgs.size();
-    Thread[] arttrds = new Thread[artclno];
-    for (Thread arttrdi : arttrds) {
-      arttrdi = new Thread(arpgs.get(--artclno));
-      arttrdi.start();
+    Thread[] arttrds = null;
+    {
+      int artclno = arpgs.size();
+      arttrds = new Thread[artclno--];
+      while (artclno >= 0) {
+        arttrds[artclno] = new Thread(arpgs.get(artclno));
+        arttrds[artclno].start();
+        artclno--;
+      }
     }
     for (Thread arttrdi : arttrds) {
       try {
+        System.out.println("Going to wait for a thread");
         arttrdi.join();
+        System.out.println("Now completed waiting");
       } catch (InterruptedException e) {
         // I am just going to ignore this,
         // because here this exception should not happen anyway
@@ -34,6 +94,7 @@ public class Publisher {
     if (fp.buildArticleIndex(arpgs)) {
       fp.buildFrontPage();
     }
+    */
   }
 
 }
