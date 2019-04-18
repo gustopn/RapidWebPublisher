@@ -51,8 +51,7 @@ public class Publisher {
   public static void main(String[] args) {
     
     if (args.length != 1) {
-      System.err.println("Invalid number of arguments given, exiting");
-      // TODO: Print usage help
+      printUsageHelp(args);
       System.exit(1);
     }
     
@@ -60,29 +59,33 @@ public class Publisher {
     File webdir = new File(givenpath);
     
     if (!webdir.exists()) {
+      if ( ! webdir.getParentFile().canWrite() ) {
+        System.out.println("We do not have sufficient rights to create a directory inside of " + webdir.getParent() + ", leaving now!");
+        System.exit(1);
+      }
       System.out.println("Destination directory of webpage does not exist, do you want to create a new one?");
       System.out.print("Answer Yes/No: ");
       Scanner scan = new Scanner(System.in);
-      if ( scan.nextLine().toLowerCase().equals("yes") ) {
-        
+      if ( scan.nextLine().toLowerCase().equals("yes") ) {      
+        webdir.mkdir();
       } else {
         System.out.println("Directory does not exist and we do not want to create one, leaving now!");
         System.exit(1);
       }
     }
     
-    if (webdir.exists()) {
-      if (webdir.isDirectory()) {
-        String articlesdirpath = webdir.getAbsolutePath() + "/articles";
-        String sectionsdirpath = webdir.getAbsolutePath() + "/sections";
-        if (prepareDirectory(webdir, articlesdirpath, sectionsdirpath)) {
-          // TODO: Start collecting articles comparing their creation time to what we already have exported
-          ArticleTextFileFinder articleFinder = new ArticleTextFileFinder(articlesdirpath);
-          articleFinder.isCurrent();
-          // TODO: At same time start collecting front page sections and their creation time to what we already have exported
-          SectionFileFinder sectionFinder = new SectionFileFinder(sectionsdirpath);
-        }
-      }
+    if (!webdir.isDirectory()) {
+      System.out.println("Path " + webdir.getAbsolutePath() + " is not a directory, leaving now!");
+      System.exit(1);
+    }
+    String articlesdirpath = webdir.getAbsolutePath() + "/articles";
+    String sectionsdirpath = webdir.getAbsolutePath() + "/sections";
+    if (prepareDirectory(webdir, articlesdirpath, sectionsdirpath)) {
+      // TODO: Start collecting articles comparing their creation time to what we already have exported
+      ArticleTextFileFinder articleFinder = new ArticleTextFileFinder(articlesdirpath);
+      articleFinder.isCurrent();
+      // TODO: At same time start collecting front page sections and their creation time to what we already have exported
+      SectionFileFinder sectionFinder = new SectionFileFinder(sectionsdirpath);
     }
   
     
