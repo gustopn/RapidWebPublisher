@@ -56,23 +56,35 @@ public class Publisher {
       System.exit(1);
     }
     
-    if (args.length == 1) {
-      String givenpath = args[0];
-      File webdir = new File(givenpath);
-      if (webdir.exists()) {
-        if (webdir.isDirectory()) {
-          String articlesdirpath = webdir.getAbsolutePath() + "/articles";
-          String sectionsdirpath = webdir.getAbsolutePath() + "/sections";
-          if (prepareDirectory(webdir, articlesdirpath, sectionsdirpath)) {
-            // TODO: Start collecting articles comparing their creation time to what we already have exported
-            ArticleTextFileFinder articleFinder = new ArticleTextFileFinder(articlesdirpath);
-            articleFinder.isCurrent();
-            // TODO: At same time start collecting front page sections and their creation time to what we already have exported
-            SectionFileFinder sectionFinder = new SectionFileFinder(sectionsdirpath);
-          }
+    String givenpath = args[0];
+    File webdir = new File(givenpath);
+    
+    if (!webdir.exists()) {
+      System.out.println("Destination directory of webpage does not exist, do you want to create a new one?");
+      System.out.print("Answer Yes/No: ");
+      Scanner scan = new Scanner(System.in);
+      if ( scan.nextLine().toLowerCase().equals("yes") ) {
+        
+      } else {
+        System.out.println("Directory does not exist and we do not want to create one, leaving now!");
+        System.exit(1);
+      }
+    }
+    
+    if (webdir.exists()) {
+      if (webdir.isDirectory()) {
+        String articlesdirpath = webdir.getAbsolutePath() + "/articles";
+        String sectionsdirpath = webdir.getAbsolutePath() + "/sections";
+        if (prepareDirectory(webdir, articlesdirpath, sectionsdirpath)) {
+          // TODO: Start collecting articles comparing their creation time to what we already have exported
+          ArticleTextFileFinder articleFinder = new ArticleTextFileFinder(articlesdirpath);
+          articleFinder.isCurrent();
+          // TODO: At same time start collecting front page sections and their creation time to what we already have exported
+          SectionFileFinder sectionFinder = new SectionFileFinder(sectionsdirpath);
         }
       }
     }
+  
     
     System.out.println(new HTML5());
     
