@@ -39,7 +39,22 @@ public class Publisher {
     return true;
   }
   
+  private static void printUsageHelp(String[] givenArguments) {
+    System.out.print("Invalid arguments: ");
+    for (String argumentInstance : givenArguments) {
+      System.out.print(argumentInstance);
+    }
+    System.out.println("\n");
+    System.out.println("Only one argument, the destination directory of the webpage, is supported");
+  }
+  
   public static void main(String[] args) {
+    
+    if (args.length != 1) {
+      System.err.println("Invalid number of arguments given, exiting");
+      // TODO: Print usage help
+      System.exit(1);
+    }
     
     if (args.length == 1) {
       String givenpath = args[0];
@@ -57,10 +72,6 @@ public class Publisher {
           }
         }
       }
-    } else {
-      System.err.println("Invalid number of arguments given, exiting");
-      // TODO: Print usage help
-      System.exit(1);
     }
     
     System.out.println(new HTML5());
